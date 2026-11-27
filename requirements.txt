@@ -1,0 +1,17 @@
+
+# Flask backend
+Flask
+
+# Computer vision and image processing
+opencv-python
+numpy
+
+# QR code generation
+qrcode[pil]
+Pillow
+
+# Testing framework
+pytest
+
+# Data handling and question import
+pandas

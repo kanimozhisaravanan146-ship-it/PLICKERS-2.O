@@ -1,0 +1,81 @@
+# ==========================================
+# PLICKERS-2.0 - GITIGNORE
+# ==========================================
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Pytest cache and testing reports
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+test-results/
+*.cover
+
+# Flask files
+instance/
+.webassets-cache/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Log files
+*.log
+logs/
+
+# Generated QR codes
+generated_qr/
+qr_output/
+qr_codes/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# VS Code and IDE settings
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Python build and distribution
+build/
+dist/
+*.egg-info/
+
+# Node.js dependencies
+node_modules/
+
+# Coverage and profiling
+.prof
+.profraw
+
+# Backup files
+*~

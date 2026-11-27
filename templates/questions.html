@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Questions | PLICKERS 2.0</title>
+
+    <!-- Flask CSS connection -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Excel and CSV support -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+            defer></script>
+
+    <!-- Flask JavaScript connection -->
+    <script src="{{ url_for('static', filename='question_import.js') }}"
+            defer></script>
+</head>
+
+<body>
+
+<header class="main-header">
+    <div class="header-content">
+        <div>
+            <h1>PLICKERS 2.0</h1>
+            <p>Question Management</p>
+        </div>
+        <div class="system-status">Question Manager</div>
+    </div>
+</header>
+
+<nav class="navigation">
+    <a href="{{ url_for('index') }}" class="nav-link">Dashboard</a>
+    <a href="{{ url_for('questions') }}" class="nav-link active">Questions</a>
+    <a href="{{ url_for('scanner') }}" class="nav-link">Scanner</a>
+</nav>
+
+<main class="dashboard-container">
+
+    <div class="page-heading">
+        <h2>Manage Classroom Questions</h2>
+        <p>Create questions manually or import them using a CSV or Excel file.</p>
+    </div>
+
+    <!-- Manual Question Creation -->
+    <section class="panel">
+        <h2>Create Question Manually</h2>
+
+        <form id="manualQuestionForm">
+
+            <div class="form-group">
+                <label for="questionTitle">Question</label>
+                <textarea id="questionTitle"
+                          placeholder="Enter your question"
+                          required></textarea>
+            </div>
+
+            <div class="options-grid">
+                <div class="form-group">
+                    <label for="optionA">Option A</label>
+                    <input type="text" id="optionA"
+                           placeholder="Enter option A" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="optionB">Option B</label>
+                    <input type="text" id="optionB"
+                           placeholder="Enter option B" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="optionC">Option C</label>
+                    <input type="text" id="optionC"
+                           placeholder="Enter option C" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="optionD">Option D</label>
+                    <input type="text" id="optionD"
+                           placeholder="Enter option D" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="correctAnswer">Correct Answer</label>
+                <select id="correctAnswer" required>
+                    <option value="">Select correct answer</option>
+                    <option value="A">Option A</option>
+                    <option value="B">Option B</option>
+                    <option value="C">Option C</option>
+                    <option value="D">Option D</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">Save Question</button>
+            </div>
+
+            <div id="manualMessage" class="message"></div>
+        </form>
+    </section>
+
+    <!-- CSV / Excel Import -->
+    <section class="panel">
+        <h2>Import Questions from CSV / Excel</h2>
+
+        <div class="import-info">
+            <p><strong>Supported formats:</strong> CSV and XLSX</p>
+            <p><strong>Maximum file size:</strong> 5 MB</p>
+            <p><strong>Maximum questions:</strong> 500</p>
+            <p>
+                Required columns:
+                <code>title, option_a, option_b, option_c, option_d, correct</code>
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="questionFile">Choose CSV or Excel File</label>
+            <input type="file" id="questionFile"
+                   accept=".csv,.xlsx">
+        </div>
+
+        <div class="form-actions">
+            <button type="button" id="previewButton" class="btn-secondary">
+                Preview Questions
+            </button>
+
+            <button type="button" id="importButton"
+                    class="btn-success" disabled>
+                Import Questions
+            </button>
+        </div>
+
+        <div id="importMessage" class="message"></div>
+
+        <div class="preview-section" id="previewTable">
+            <h3>Import Preview</h3>
+            <p id="previewCount">No questions loaded.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Option A</th>
+                            <th>Option B</th>
+                            <th>Option C</th>
+                            <th>Option D</th>
+                            <th>Correct Answer</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewQuestionTable">
+                        <tr>
+                            <td colspan="6">Choose a file to preview questions.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>PLICKERS 2.0 | RotQR Classroom Response System</p>
+</footer>
+
+<!-- Manual question form submission -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("manualQuestionForm");
+    const message = document.getElementById("manualMessage");
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const question = {
+            title: document.getElementById("questionTitle").value.trim(),
+            option_a: document.getElementById("optionA").value.trim(),
+            option_b: document.getElementById("optionB").value.trim(),
+            option_c: document.getElementById("optionC").value.trim(),
+            option_d: document.getElementById("optionD").value.trim(),
+            correct: document.getElementById("correctAnswer").value
+        };
+
+        try {
+            const response = await fetch("/api/questions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(question)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Unable to save question.");
+            }
+
+            message.textContent = data.message || "Question saved successfully!";
+            message.className = "message success";
+            form.reset();
+
+        } catch (error) {
+            message.textContent = error.message;
+            message.className = "message error";
+        }
+    });
+});
+</script>
+
+</body>
+</html>
