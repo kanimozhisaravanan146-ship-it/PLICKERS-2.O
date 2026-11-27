@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLICKERS 2.0 | RotQR Classroom</title>
+
+    <!-- Flask CSS connection -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Flask JavaScript connection -->
+    <script src="{{ url_for('static', filename='dashboard.js') }}"
+            defer></script>
+</head>
+
+<body>
+
+<header class="main-header">
+    <div class="header-content">
+        <div>
+            <h1>PLICKERS 2.0</h1>
+            <p>RotQR Classroom Response System</p>
+        </div>
+        <div class="system-status">System Ready</div>
+    </div>
+</header>
+
+<nav class="navigation">
+    <a href="{{ url_for('index') }}" class="nav-link active">Dashboard</a>
+    <a href="{{ url_for('questions') }}" class="nav-link">Questions</a>
+    <a href="{{ url_for('scanner') }}" class="nav-link">Scanner</a>
+</nav>
+
+<main class="dashboard-container">
+
+    <section class="panel">
+        <h2>Student Management</h2>
+
+        <form id="studentForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="studentCode">Student Code</label>
+                    <input type="text" id="studentCode"
+                           placeholder="Enter student code" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentName">Student Name</label>
+                    <input type="text" id="studentName"
+                           placeholder="Enter student name" required>
+                </div>
+
+                <button type="submit">Add Student</button>
+            </div>
+        </form>
+
+        <div id="studentMessage" class="message"></div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('cards_pdf') }}" class="button-link">
+                Download QR Cards
+            </a>
+        </div>
+
+        <h3>Registered Students</h3>
+        <p id="studentCount">Total Students: 0</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Code</th>
+                        <th>Student Name</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTable">
+                    <tr>
+                        <td colspan="2">Loading students...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Question Management</h2>
+
+        <p class="section-description">
+            View questions and activate a question for classroom scanning.
+        </p>
+
+        <div class="form-actions">
+            <a href="{{ url_for('questions') }}" class="button-link">
+                Manage Questions
+            </a>
+        </div>
+
+        <div id="questionMessage" class="message"></div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Question ID</th>
+                        <th>Question</th>
+                        <th>Correct Answer</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="questionTable">
+                    <tr>
+                        <td colspan="5">Loading questions...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="active-question-box">
+            <h3>Currently Active Question</h3>
+            <p id="activeQuestion">No active question selected.</p>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Classroom Scanner</h2>
+        <p class="section-description">
+            Scan multiple RotQR student cards to collect classroom answers.
+        </p>
+
+        <a href="{{ url_for('scanner') }}" class="button-link">
+            Open Scanner
+        </a>
+    </section>
+
+    <section class="panel">
+        <h2>Live Classroom Results</h2>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Students</h3>
+                <p id="classSize">0</p>
+            </div>
+
+            <div class="stat-card counted">
+                <h3>Responses Counted</h3>
+                <p id="counted">0</p>
+            </div>
+
+            <div class="stat-card correct">
+                <h3>Correct Answers</h3>
+                <p id="correct">0</p>
+            </div>
+
+            <div class="stat-card wrong">
+                <h3>Wrong Answers</h3>
+                <p id="wrong">0</p>
+            </div>
+        </div>
+
+        <div class="stat-card not-counted">
+            <h3>Not Counted</h3>
+            <p id="notCounted">0</p>
+        </div>
+
+        <div id="resultsMessage" class="message"></div>
+
+        <h3>Student Response Details</h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Code</th>
+                        <th>Student Name</th>
+                        <th>Selected Answer</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTable">
+                    <tr>
+                        <td colspan="4">Waiting for responses...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p id="lastUpdated" class="last-updated">
+            Last updated: Not yet updated
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>PLICKERS 2.0 | RotQR Classroom Response System</p>
+</footer>
+
+</body>
+</html>
