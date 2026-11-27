@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RotQR Classroom Scanner</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="scanner-header">
+        <h1>RotQR Scanner</h1>
+        <p>QR-based classroom response system</p>
+    </header>
+
+    <main class="scanner-container">
+
+        <!-- Active question -->
+        <section class="scanner-panel">
+            <h2>Current Question</h2>
+
+            <p id="activeQuestion">
+                Checking active question...
+            </p>
+        </section>
+
+        <!-- Camera -->
+        <section class="scanner-panel">
+
+            <h2>Classroom Camera</h2>
+
+            <div class="video-container">
+                <video
+                    id="video"
+                    autoplay
+                    playsinline
+                    muted>
+                </video>
+            </div>
+
+            <!-- Hidden canvas used to capture frames -->
+            <canvas id="canvas" hidden></canvas>
+
+            <div class="scanner-buttons">
+
+                <button id="startCamera" type="button">
+                    Start Camera
+                </button>
+
+                <button id="stopCamera"
+                        type="button"
+                        disabled>
+                    Stop Camera
+                </button>
+
+            </div>
+
+            <p id="scannerStatus" role="status" aria-live="polite">
+                Camera is stopped.
+            </p>
+
+        </section>
+
+        <!-- Scanning instructions -->
+        <section class="scanner-panel">
+
+            <h2>Instructions</h2>
+
+            <ul>
+                <li>Show your unique QR card to the camera.</li>
+                <li>Keep the red marker visible.</li>
+                <li>Keep the QR card clearly visible.</li>
+                <li>Rotate the card to select your answer.</li>
+            </ul>
+
+            <p class="orientation-hint">
+                TOP = A |
+                RIGHT = B |
+                BOTTOM = C |
+                LEFT = D
+            </p>
+
+        </section>
+
+        <!-- Scan results -->
+        <section class="scanner-panel">
+
+            <h2>Scan Activity</h2>
+
+            <ul id="scanLog" aria-live="polite">
+                <li>No cards scanned yet.</li>
+            </ul>
+
+        </section>
+
+        <div class="dashboard-link">
+            <a href="/">Back to Dashboard</a>
+        </div>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='scanner.js') }}"
+            defer>
+    </script>
+
+</body>
+</html>
